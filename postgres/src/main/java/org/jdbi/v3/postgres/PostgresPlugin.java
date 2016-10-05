@@ -50,6 +50,7 @@ public class PostgresPlugin implements JdbiPlugin {
         db.registerArgument(new PeriodArgumentFactory());
         db.registerArgument(new InetArgumentFactory());
         db.registerArgument(new HStoreArgumentFactory());
+        db.registerArgument(new EnumSetArgumentFactory());
 
         db.registerArrayType(int.class, "integer");
         db.registerArrayType(Integer.class, "integer");
@@ -66,5 +67,7 @@ public class PostgresPlugin implements JdbiPlugin {
         db.registerColumnMapper(new HStoreColumnMapper());
         db.registerColumnMapper(new DurationColumnMapperFactory());
         db.registerColumnMapper(new PeriodColumnMapperFactory());
+
+        db.registerColumnMapper(new EnumSetMapperFactory());
     }
 }
