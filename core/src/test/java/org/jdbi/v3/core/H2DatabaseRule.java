@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.h2.Driver;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 import org.junit.rules.ExternalResource;
 
@@ -36,6 +37,7 @@ public class H2DatabaseRule extends ExternalResource implements DatabaseRule
     @Override
     protected void before() throws Throwable
     {
+        new Driver();
         dbi = Jdbi.create(uri);
         if (installPlugins) {
             dbi.installPlugins();

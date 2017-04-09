@@ -20,6 +20,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.bitstrings.test.junit.runner.ClptrExclude;
 import org.h2.jdbcx.JdbcDataSource;
-import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.ResultIterator;
 import org.jdbi.v3.core.Something;
 import org.jdbi.v3.core.StatementContext;
@@ -46,7 +48,11 @@ import org.jdbi.v3.sqlobject.mixins.Transactional;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
+@RunWith( LeakDetectorClassLoaderPerTestRunner.class )
+@ClptrExclude({"java", "javax", "org.junit", "org.jdbi.v3.sqlobject.TestOnDemandSqlObject"})
 public class TestOnDemandSqlObject
 {
     private Jdbi    dbi;
@@ -72,6 +78,10 @@ public class TestOnDemandSqlObject
     public void tearDown() throws Exception
     {
         handle.close();
+
+        Field field = ThreadSafeMockingProgress.class.getDeclaredField("MOCKING_PROGRESS_PROVIDER");
+        field.setAccessible(true);
+        ((ThreadLocal<?>)field.get(null)).remove();
     }
 
     @Test

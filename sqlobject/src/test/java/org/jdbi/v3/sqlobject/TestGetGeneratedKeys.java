@@ -16,10 +16,15 @@ package org.jdbi.v3.sqlobject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.bitstrings.test.junit.runner.ClptrExclude;
 import org.jdbi.v3.core.H2DatabaseRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+
+@RunWith( LeakDetectorClassLoaderPerTestRunner.class )
+@ClptrExclude({"java", "javax", "org.junit", "org.jdbi.v3.sqlobject.TestGetGeneratedKeys"})
 public class TestGetGeneratedKeys
 {
     @Rule

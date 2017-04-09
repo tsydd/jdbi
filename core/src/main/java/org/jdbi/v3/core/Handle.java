@@ -65,6 +65,7 @@ public class Handle implements Closeable, Configurable<Handle>
         this.statementBuilder = statementBuilder;
     }
 
+    @Override
     public ConfigRegistry getConfig() {
         return config.get();
     }
@@ -103,6 +104,7 @@ public class Handle implements Closeable, Configurable<Handle>
      */
     @Override
     public void close() {
+        config.remove();
         extensionMethod.remove();
         if (!closed) {
             try {
