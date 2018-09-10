@@ -14,6 +14,7 @@
 package org.jdbi.v3.postgres;
 
 import static org.jdbi.v3.postgres.PostgresQualifiers.HSTORE;
+import static org.jdbi.v3.postgres.PostgresQualifiers.MAC_ADDR;
 
 import java.util.Map;
 import java.util.UUID;
@@ -112,6 +113,8 @@ public class PostgresPlugin implements JdbiPlugin {
             HSTORE);
         db.registerColumnMapper(hstoreMapType, new HStoreColumnMapper());
         db.registerColumnMapper(new MacAddrColumnMapper());
+        QualifiedType macAddrStringType = QualifiedType.of(String.class, MAC_ADDR);
+        db.registerColumnMapper(macAddrStringType, new MacAddrColumnMapper());
         db.registerColumnMapper(new DurationColumnMapperFactory());
         db.registerColumnMapper(new PeriodColumnMapperFactory());
     }

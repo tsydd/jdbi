@@ -22,13 +22,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.jdbi.v3.core.config.ConfigRegistry;
 import org.jdbi.v3.core.config.JdbiConfig;
+import org.jdbi.v3.core.qualifier.QualifiedType;
+import org.jdbi.v3.meta.Beta;
 
 /**
  * Configuration class for SQL array binding and mapping.
  */
 public class SqlArrayTypes implements JdbiConfig<SqlArrayTypes> {
-    private final List<SqlArrayTypeFactory> factories = new CopyOnWriteArrayList<>();
-    private SqlArrayArgumentStrategy argumentStrategy = SqlArrayArgumentStrategy.SQL_ARRAY;
+    private final List<QualifiedSqlArrayTypeFactory> factories = new CopyOnWriteArrayList<>();
+    private SqlArrayArgumentStrategy argumentStrategy;
     private ConfigRegistry registry;
 
     public SqlArrayTypes() {
@@ -72,6 +74,19 @@ public class SqlArrayTypes implements JdbiConfig<SqlArrayTypes> {
      * @return this
      */
     public SqlArrayTypes register(Class<?> elementType, String sqlTypeName) {
+        return register(QualifiedType.of(elementType), sqlTypeName);
+    }
+
+    /**
+     * Register an array element type that is supported by the JDBC vendor.
+     *
+     * @param elementType the array element type
+     * @param sqlTypeName the vendor-specific SQL type name for the array type.  This value will be passed to
+     *                    {@link java.sql.Connection#createArrayOf(String, Object[])} to create SQL arrays.
+     * @return this
+     */
+    @Beta
+    public SqlArrayTypes register(QualifiedType elementType, String sqlTypeName) {
         return register(VendorSupportedArrayType.factory(elementType, sqlTypeName));
     }
 
@@ -98,6 +113,24 @@ public class SqlArrayTypes implements JdbiConfig<SqlArrayTypes> {
      * @return this
      */
     public SqlArrayTypes register(SqlArrayTypeFactory factory) {
+        return register(adaptToQualified(factory));
+    }
+
+    private QualifiedSqlArrayTypeFactory adaptToQualified(SqlArrayTypeFactory factory) {
+        return (type, config) -> type.getQualifiers().isEmpty()
+            ? factory.build(type.getType(), config)
+            : Optional.empty();
+    }
+
+    /**
+     * Register a {@link SqlArrayTypeFactory}. A factory is provided element types and, if it supports it, provides an
+     * {@link SqlArrayType} for it.
+     *
+     * @param factory the factory
+     * @return this
+     */
+    @Beta
+    public SqlArrayTypes register(QualifiedSqlArrayTypeFactory factory) {
         factories.add(0, factory);
         return this;
     }
@@ -109,9 +142,20 @@ public class SqlArrayTypes implements JdbiConfig<SqlArrayTypes> {
      * @return an {@link SqlArrayType} for the given element type.
      */
     public Optional<SqlArrayType<?>> findFor(Type elementType) {
+        return findFor(QualifiedType.of(elementType));
+    }
+
+    /**
+     * Obtain an {@link SqlArrayType} for the given array element type in the given context
+     *
+     * @param elementType the array element type.
+     * @return an {@link SqlArrayType} for the given element type.
+     */
+    @Beta
+    public Optional<SqlArrayType<?>> findFor(QualifiedType elementType) {
         return factories.stream()
-                .flatMap(factory -> toStream(factory.build(elementType, registry)))
-                .findFirst();
+            .flatMap(factory -> toStream(factory.build(elementType, registry)))
+            .findFirst();
     }
 
     @Override

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.jdbi.v3.core.array.QualifiedSqlArrayArgumentFactory;
 import org.jdbi.v3.core.qualifier.QualifiedType;
-import org.jdbi.v3.core.array.SqlArrayArgumentFactory;
 import org.jdbi.v3.core.config.ConfigRegistry;
 import org.jdbi.v3.core.config.JdbiConfig;
 import org.jdbi.v3.meta.Beta;
@@ -41,7 +41,7 @@ public class Arguments implements JdbiConfig<Arguments> {
 
     public Arguments() {
         register(BuiltInArgumentFactory.INSTANCE);
-        register(new SqlArrayArgumentFactory());
+        register(new QualifiedSqlArrayArgumentFactory());
         register(new JavaTimeZoneIdArgumentFactory());
 
         register(BuiltInQualifiedArgumentFactory.INSTANCE);

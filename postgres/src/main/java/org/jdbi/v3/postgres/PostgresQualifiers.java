@@ -24,6 +24,7 @@ import org.jdbi.v3.meta.Beta;
 public class PostgresQualifiers {
     private PostgresQualifiers() {}
 
+    // todo should these be static methods instead of constants?
     public static final HStore HSTORE = new HStore() {
         @Override
         public Class<? extends Annotation> annotationType() {
@@ -43,6 +44,28 @@ public class PostgresQualifiers {
         @Override
         public String toString() {
             return "@org.jdbi.v3.postgres.HStore()";
+        }
+    };
+
+    public static final MacAddr MAC_ADDR = new MacAddr() {
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return MacAddr.class;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof MacAddr;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
+        }
+
+        @Override
+        public String toString() {
+            return "@org.jdbi.v3.postgres.MacAddr()";
         }
     };
 }

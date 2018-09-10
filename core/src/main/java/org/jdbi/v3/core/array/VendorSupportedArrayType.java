@@ -14,9 +14,10 @@
 package org.jdbi.v3.core.array;
 
 import java.util.Optional;
+import org.jdbi.v3.core.qualifier.QualifiedType;
 
 class VendorSupportedArrayType<T> implements SqlArrayType<T> {
-    static <T> SqlArrayTypeFactory factory(Class<T> type, String sqlTypeName) {
+    static <T> QualifiedSqlArrayTypeFactory factory(QualifiedType type, String sqlTypeName) {
         SqlArrayType<T> arrayType = new VendorSupportedArrayType<>(sqlTypeName);
         return (t, ctx) -> t.equals(type) ? Optional.of(arrayType) : Optional.empty();
     }

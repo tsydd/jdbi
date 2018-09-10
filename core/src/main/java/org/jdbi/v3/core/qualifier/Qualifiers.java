@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -28,6 +29,7 @@ import org.jdbi.v3.meta.Beta;
  */
 @Beta
 public class Qualifiers {
+    @NVarchar
     private Qualifiers() {}
 
     /**
@@ -63,7 +65,7 @@ public class Qualifiers {
      * @return the set of qualifying annotations on the given elements.
      */
     public static Set<Annotation> getQualifyingAnnotations(AnnotatedElement... elements) {
-        return Stream.of(elements)
+        return Arrays.stream(elements)
             .filter(Objects::nonNull)
             .flatMap(element -> Stream.of(element.getAnnotations()))
             .filter(anno -> anno.annotationType().isAnnotationPresent(Qualifier.class))

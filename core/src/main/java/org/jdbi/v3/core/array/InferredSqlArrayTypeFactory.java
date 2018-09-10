@@ -15,28 +15,31 @@ package org.jdbi.v3.core.array;
 
 import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 
-import java.lang.reflect.Type;
 import java.util.Optional;
 
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.qualifier.QualifiedType;
+import org.jdbi.v3.core.qualifier.Qualifiers;
 
 /**
  * A generic {@link SqlArrayTypeFactory} that reflectively inspects an {@link SqlArrayType SqlArrayType<T>} and maps
  * only arrays of element type {@code T}. The type parameter {@code T} must be accessible via reflection or an
  * {@link UnsupportedOperationException} will be thrown.
  */
-class InferredSqlArrayTypeFactory implements SqlArrayTypeFactory {
-    private final Type elementType;
+class InferredSqlArrayTypeFactory implements QualifiedSqlArrayTypeFactory {
+    private final QualifiedType elementType;
     private final SqlArrayType<?> arrayType;
 
     InferredSqlArrayTypeFactory(SqlArrayType<?> arrayType) {
-        this.elementType = findGenericParameter(arrayType.getClass(), SqlArrayType.class)
-                .orElseThrow(() -> new UnsupportedOperationException("Must use a concretely typed SqlArrayType here"));
+        this.elementType = QualifiedType.of(
+            findGenericParameter(arrayType.getClass(), SqlArrayType.class)
+                .orElseThrow(() -> new UnsupportedOperationException("Must use a concretely typed SqlArrayType here")),
+            Qualifiers.getQualifyingAnnotations(arrayType.getClass()));
         this.arrayType = arrayType;
     }
 
     @Override
-    public Optional<SqlArrayType<?>> build(Type elementType, ConfigRegistry config) {
+    public Optional<SqlArrayType<?>> build(QualifiedType elementType, ConfigRegistry config) {
         return this.elementType.equals(elementType)
                 ? Optional.of(arrayType)
                 : Optional.empty();

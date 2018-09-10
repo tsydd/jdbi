@@ -33,7 +33,7 @@ public class TestQualifiers {
     }
 
     @Test
-    public void testQualifiedType() throws Exception {
+    public void testQualifiedType() {
         assertThat(QualifiedType.of(String.class, Qualifiers.NVARCHAR))
             .isEqualTo(QualifiedType.of(String.class, Qualifiers.NVARCHAR))
             .hasSameHashCodeAs(QualifiedType.of(String.class, Qualifiers.NVARCHAR))
