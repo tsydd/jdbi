@@ -1,3 +1,7 @@
+3.6.0
+  - New Feature
+    - Initial support for Immutables value objects
+
 3.5.2
   - Bug Fixes
     - bindList throws an NPE if called with an immutable list,
