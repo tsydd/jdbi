@@ -30,9 +30,7 @@ import org.jdbi.v3.core.config.JdbiConfig;
 public class HandlerDecorators implements JdbiConfig<HandlerDecorators> {
     private final List<HandlerDecorator> decorators = new CopyOnWriteArrayList<>();
 
-    public HandlerDecorators() {
-        register(new SqlMethodAnnotatedHandlerDecorator());
-    }
+    public HandlerDecorators() {}
 
     private HandlerDecorators(HandlerDecorators that) {
         decorators.addAll(that.decorators);

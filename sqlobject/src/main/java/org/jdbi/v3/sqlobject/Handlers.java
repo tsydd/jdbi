@@ -31,11 +31,7 @@ import static org.jdbi.v3.core.internal.JdbiStreams.toStream;
 public class Handlers implements JdbiConfig<Handlers> {
     private final List<HandlerFactory> factories = new CopyOnWriteArrayList<>();
 
-    public Handlers() {
-        register(new DefaultMethodHandlerFactory());
-        register(new SqlMethodHandlerFactory());
-        register(new BridgeMethodHandlerFactory());
-    }
+    public Handlers() {}
 
     private Handlers(Handlers that) {
         factories.addAll(that.factories);
