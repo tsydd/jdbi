@@ -28,6 +28,13 @@ import org.jdbi.v3.core.internal.defaults.arguments.PrimitivesArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.SqlArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.SqlTimeArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.UntypedNullArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.ArrayCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.EnumSetCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.ListCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.MapCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.OptionalCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.OptionalPrimitiveCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.SetCollectorFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.BoxedMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.EssentialsMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.InternetMapperFactory;
@@ -51,9 +58,13 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
     @Override
     public void customizeJdbi(Jdbi jdbi) {
         installArguments(jdbi);
+
         installColumnMappers(jdbi);
         installRowMappers(jdbi);
         configureMappers(jdbi);
+
+        installCollectors(jdbi);
+
         configureStatements(jdbi);
     }
 
@@ -102,6 +113,19 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
             new CaseInsensitiveColumnNameMatcher(),
             new SnakeCaseColumnNameMatcher()
         ));
+    }
+
+    private static void installCollectors(Jdbi jdbi) {
+        jdbi.registerCollector(new MapCollectorFactory());
+
+        jdbi.registerCollector(new ListCollectorFactory());
+        jdbi.registerCollector(new ArrayCollectorFactory());
+
+        jdbi.registerCollector(new SetCollectorFactory());
+        jdbi.registerCollector(new EnumSetCollectorFactory());
+
+        jdbi.registerCollector(new OptionalCollectorFactory());
+        jdbi.registerCollector(new OptionalPrimitiveCollectorFactory());
     }
 
     private static void configureStatements(Jdbi jdbi) {

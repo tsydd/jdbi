@@ -14,6 +14,7 @@
 package org.jdbi.v3.core.collector;
 
 import org.jdbi.v3.core.generic.GenericType;
+import org.jdbi.v3.core.internal.defaults.collectors.EnumSetCollectorFactory;
 import org.junit.Test;
 
 import java.lang.reflect.Type;

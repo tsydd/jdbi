@@ -11,8 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
+import org.jdbi.v3.core.collector.CollectorFactory;
 import org.jdbi.v3.core.generic.GenericTypes;
 
 import java.lang.reflect.ParameterizedType;
@@ -25,8 +26,7 @@ import java.util.stream.Collector;
 import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class EnumSetCollectorFactory implements CollectorFactory {
-
+public class EnumSetCollectorFactory implements CollectorFactory {
     @Override
     public boolean accepts(Type containerType) {
         // compiler ensures that elements of EnumSet<E extends Enum<E>> are always enums

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 import org.jdbi.v3.core.generic.GenericType;
+import org.jdbi.v3.core.internal.defaults.collectors.ListCollectorFactory;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

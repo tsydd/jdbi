@@ -20,6 +20,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+import org.jdbi.v3.core.internal.defaults.collectors.ListCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.MapCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.OptionalCollectorFactory;
+import org.jdbi.v3.core.internal.defaults.collectors.SetCollectorFactory;
 
 /**
  * Provides Collectors for built in JDK container types.

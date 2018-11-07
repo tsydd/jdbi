@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -26,15 +26,16 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collector;
+import org.jdbi.v3.core.collector.CollectorFactory;
 import org.jdbi.v3.core.generic.GenericTypes;
 
 import static org.jdbi.v3.core.collector.MapCollectors.toMap;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class MapCollectorFactory implements CollectorFactory {
+public class MapCollectorFactory implements CollectorFactory {
     private final Map<Class<?>, Collector<?, ?, ?>> collectors = new IdentityHashMap<>();
 
-    MapCollectorFactory() {
+    public MapCollectorFactory() {
         collectors.put(Map.class, toMap(LinkedHashMap::new));
         collectors.put(HashMap.class, toMap(HashMap::new));
         collectors.put(LinkedHashMap.class, toMap(LinkedHashMap::new));

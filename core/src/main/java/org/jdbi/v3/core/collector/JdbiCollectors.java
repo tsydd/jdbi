@@ -28,16 +28,7 @@ import org.jdbi.v3.core.config.JdbiConfig;
 public class JdbiCollectors implements JdbiConfig<JdbiCollectors> {
     private final List<CollectorFactory> factories = new CopyOnWriteArrayList<>();
 
-    public JdbiCollectors() {
-        // TODO move to BuiltInSupportPlugin
-        register(new MapCollectorFactory());
-        register(new OptionalCollectorFactory());
-        register(new ListCollectorFactory());
-        register(new SetCollectorFactory());
-        register(new OptionalPrimitiveCollectorFactory());
-        register(new ArrayCollectorFactory());
-        register(new EnumSetCollectorFactory());
-    }
+    public JdbiCollectors() {}
 
     private JdbiCollectors(JdbiCollectors that) {
         factories.addAll(that.factories);

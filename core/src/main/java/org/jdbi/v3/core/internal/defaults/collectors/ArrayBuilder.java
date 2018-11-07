@@ -11,29 +11,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 class ArrayBuilder {
-    Class<?> componentType;
-    List<Object> list = new ArrayList<>();
+    private Class<?> componentType;
+    private List<Object> list = new ArrayList<>();
 
     ArrayBuilder(Class<?> componentType) {
         this.componentType = componentType;
     }
 
-    public void add(Object element) {
+    void add(Object element) {
         list.add(element);
     }
 
-    public Object build() {
+    Object build() {
         Object array = Array.newInstance(componentType, list.size());
         for (int i = 0; i < list.size(); i++) {
             Array.set(array, i, list.get(i));
         }
         return array;
+    }
+
+    ArrayBuilder combine(ArrayBuilder other) {
+        list.addAll(other.list);
+        return this;
     }
 }

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,16 +24,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collector;
+import org.jdbi.v3.core.collector.CollectorFactory;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class ListCollectorFactory implements CollectorFactory {
+public class ListCollectorFactory implements CollectorFactory {
     private final Map<Class<?>, Collector<?, ?, ?>> collectors = new IdentityHashMap<>();
 
-    ListCollectorFactory() {
+    public ListCollectorFactory() {
         collectors.put(Collection.class, toCollection(ArrayList::new));
         collectors.put(List.class, toList());
         collectors.put(ArrayList.class, toCollection(ArrayList::new));

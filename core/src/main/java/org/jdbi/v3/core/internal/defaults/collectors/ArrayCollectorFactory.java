@@ -11,31 +11,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.stream.Collector;
+import org.jdbi.v3.core.collector.CollectorFactory;
 
-import static org.jdbi.v3.core.collector.OptionalCollectors.toOptional;
-import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class OptionalCollectorFactory implements CollectorFactory {
+public class ArrayCollectorFactory implements CollectorFactory {
     @Override
     public boolean accepts(Type containerType) {
-        return containerType instanceof ParameterizedType && Optional.class.equals(getErasedType(containerType));
+        return getErasedType(containerType).isArray();
     }
 
     @Override
     public Optional<Type> elementType(Type containerType) {
-        Class<?> erasedType = getErasedType(containerType);
-        return findGenericParameter(containerType, erasedType);
+        return Optional.ofNullable(getErasedType(containerType).getComponentType());
     }
 
     @Override
     public Collector<?, ?, ?> build(Type containerType) {
-        return toOptional();
+        Class<?> componentType = getErasedType(containerType).getComponentType();
+        return Collector.of(
+                () -> new ArrayBuilder(componentType),
+                ArrayBuilder::add,
+                ArrayBuilder::combine,
+                ArrayBuilder::build);
     }
 }

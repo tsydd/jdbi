@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.collector;
+package org.jdbi.v3.core.internal.defaults.collectors;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,16 +24,17 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collector;
+import org.jdbi.v3.core.collector.CollectorFactory;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class SetCollectorFactory implements CollectorFactory {
+public class SetCollectorFactory implements CollectorFactory {
     private final Map<Class<?>, Collector<?, ?, ?>> collectors = new IdentityHashMap<>();
 
-    SetCollectorFactory() {
+    public SetCollectorFactory() {
         collectors.put(Set.class, toSet());
         collectors.put(HashSet.class, toCollection(HashSet::new));
         collectors.put(LinkedHashSet.class, toCollection(LinkedHashSet::new));
