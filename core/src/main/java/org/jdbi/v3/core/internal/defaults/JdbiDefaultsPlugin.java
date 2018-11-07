@@ -43,6 +43,9 @@ import org.jdbi.v3.core.mapper.reflect.CaseInsensitiveColumnNameMatcher;
 import org.jdbi.v3.core.mapper.reflect.ReflectionMappers;
 import org.jdbi.v3.core.mapper.reflect.SnakeCaseColumnNameMatcher;
 import org.jdbi.v3.core.spi.JdbiPlugin;
+import org.jdbi.v3.core.statement.ColonPrefixSqlParser;
+import org.jdbi.v3.core.statement.DefinedAttributeTemplateEngine;
+import org.jdbi.v3.core.statement.SqlStatements;
 
 public class JdbiDefaultsPlugin implements JdbiPlugin {
     @Override
@@ -51,6 +54,7 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
         installColumnMappers(jdbi);
         installRowMappers(jdbi);
         configureMappers(jdbi);
+        configureStatements(jdbi);
     }
 
     private static void installArguments(Jdbi jdbi) {
@@ -98,5 +102,11 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
             new CaseInsensitiveColumnNameMatcher(),
             new SnakeCaseColumnNameMatcher()
         ));
+    }
+
+    private static void configureStatements(Jdbi jdbi) {
+        jdbi.getConfig(SqlStatements.class)
+            .setTemplateEngine(new DefinedAttributeTemplateEngine())
+            .setSqlParser(new ColonPrefixSqlParser());
     }
 }

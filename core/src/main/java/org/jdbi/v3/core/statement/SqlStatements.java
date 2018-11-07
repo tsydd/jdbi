@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import javax.annotation.Nullable;
 import org.jdbi.v3.core.config.JdbiConfig;
 import org.jdbi.v3.meta.Beta;
@@ -29,31 +28,24 @@ import org.jdbi.v3.meta.Beta;
  * Configuration holder for {@link SqlStatement}s.
  */
 public final class SqlStatements implements JdbiConfig<SqlStatements> {
-
-    private final Map<String, Object> attributes;
-    private TemplateEngine templateEngine;
-    private SqlParser sqlParser;
-    private SqlLogger sqlLogger;
-    private Integer queryTimeout;
-    private boolean allowUnusedBindings;
+    private final Map<String, Object> attributes = new ConcurrentHashMap<>();
     private final Collection<StatementCustomizer> customizers = new CopyOnWriteArrayList<>();
+    private TemplateEngine templateEngine = TemplateEngine.NOP;
+    private SqlParser sqlParser = new NopSqlParser();
+    private SqlLogger sqlLogger = SqlLogger.NOP_SQL_LOGGER;
+    private Integer queryTimeout;
+    private boolean allowUnusedBindings = false;
 
-    public SqlStatements() {
-        attributes = new ConcurrentHashMap<>();
-        templateEngine = new DefinedAttributeTemplateEngine();
-        sqlParser = new ColonPrefixSqlParser();
-        sqlLogger = SqlLogger.NOP_SQL_LOGGER;
-        queryTimeout = null;
-    }
+    public SqlStatements() {}
 
     private SqlStatements(SqlStatements that) {
-        this.attributes = new ConcurrentHashMap<>(that.attributes);
+        this.attributes.putAll(that.attributes);
+        this.customizers.addAll(that.customizers);
         this.templateEngine = that.templateEngine;
         this.sqlParser = that.sqlParser;
         this.sqlLogger = that.sqlLogger;
         this.queryTimeout = that.queryTimeout;
         this.allowUnusedBindings = that.allowUnusedBindings;
-        this.customizers.addAll(that.customizers);
     }
 
     /**
@@ -135,7 +127,7 @@ public final class SqlStatements implements JdbiConfig<SqlStatements> {
      * @return this
      */
     public SqlStatements setTemplateEngine(TemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
+        this.templateEngine = templateEngine == null ? TemplateEngine.NOP : templateEngine;
         return this;
     }
 
@@ -152,7 +144,7 @@ public final class SqlStatements implements JdbiConfig<SqlStatements> {
      * @return this
      */
     public SqlStatements setSqlParser(SqlParser sqlParser) {
-        this.sqlParser = sqlParser;
+        this.sqlParser = sqlParser == null ? new NopSqlParser() : sqlParser;
         return this;
     }
 
@@ -240,5 +232,17 @@ public final class SqlStatements implements JdbiConfig<SqlStatements> {
 
     Collection<StatementCustomizer> getCustomizers() {
         return customizers;
+    }
+
+    private static class NopSqlParser implements SqlParser {
+        @Override
+        public ParsedSql parse(String sql, StatementContext ctx) {
+            return ParsedSql.builder().append(sql).build();
+        }
+
+        @Override
+        public String nameParameter(String rawName, StatementContext ctx) {
+            return rawName;
+        }
     }
 }
