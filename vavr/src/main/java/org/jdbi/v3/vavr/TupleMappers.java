@@ -34,8 +34,10 @@ public class TupleMappers implements JdbiConfig<TupleMappers>, MapEntryConfig<Tu
 
     public TupleMappers() {}
 
+    @SuppressWarnings("CopyConstructorMissesField")
     private TupleMappers(TupleMappers that) {
         System.arraycopy(that.columns, 0, this.columns, 0, Tuple.MAX_ARITY);
+        registry = null;
     }
 
     @Override

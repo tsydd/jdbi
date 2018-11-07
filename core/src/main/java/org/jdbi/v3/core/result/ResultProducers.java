@@ -25,15 +25,12 @@ import org.jdbi.v3.core.statement.StatementContext;
  * Commonly used ResultProducer implementations.
  */
 public class ResultProducers implements JdbiConfig<ResultProducers> {
+    private boolean allowNoResults = false;
 
-    private boolean allowNoResults;
+    public ResultProducers() {}
 
-    public ResultProducers() {
-        this(false);
-    }
-
-    private ResultProducers(boolean allowNoResults) {
-        this.allowNoResults = allowNoResults;
+    private ResultProducers(ResultProducers instance) {
+        this.allowNoResults = instance.allowNoResults;
     }
 
     /**
@@ -102,6 +99,15 @@ public class ResultProducers implements JdbiConfig<ResultProducers> {
         };
     }
 
+    /**
+     * Normally a query that doesn't return a result set throws an exception.
+     * With this option, we will replace it with an empty result set instead.
+     */
+    public ResultProducers allowNoResults(boolean allowNoResults) {
+        this.allowNoResults = allowNoResults;
+        return this;
+    }
+
     private static Supplier<ResultSet> getGeneratedKeys(Supplier<PreparedStatement> supplier, StatementContext ctx) {
         return () -> {
             try {
@@ -122,15 +128,6 @@ public class ResultProducers implements JdbiConfig<ResultProducers> {
 
     @Override
     public ResultProducers createCopy() {
-        return new ResultProducers(allowNoResults);
-    }
-
-    /**
-     * Normally a query that doesn't return a result set throws an exception.
-     * With this option, we will replace it with an empty result set instead.
-     */
-    public ResultProducers allowNoResults(boolean allowNoResults) {
-        this.allowNoResults = allowNoResults;
-        return this;
+        return new ResultProducers(this);
     }
 }

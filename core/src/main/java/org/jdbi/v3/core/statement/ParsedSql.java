@@ -83,12 +83,12 @@ public class ParsedSql {
      * Fluent builder for ParsedSql instances.
      */
     public static class Builder {
-        private Builder() {}
-
         private final StringBuilder sql = new StringBuilder();
         private boolean positional = false;
         private boolean named = false;
         private final List<String> parameterNames = new ArrayList<>();
+
+        private Builder() {}
 
         /**
          * Appends the given SQL fragment to the SQL string.
