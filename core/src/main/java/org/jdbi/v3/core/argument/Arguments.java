@@ -18,7 +18,6 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.jdbi.v3.core.array.SqlArrayArgumentFactory;
 import org.jdbi.v3.core.config.ConfigRegistry;
 import org.jdbi.v3.core.config.JdbiConfig;
 
@@ -33,36 +32,20 @@ import static org.jdbi.v3.core.internal.JdbiStreams.toStream;
  */
 public class Arguments implements JdbiConfig<Arguments> {
     private final List<ArgumentFactory> argumentFactories = new CopyOnWriteArrayList<>();
-    private ConfigRegistry registry;
     private Argument untypedNullArgument = new NullArgument(Types.OTHER);
+    private ConfigRegistry registry;
 
-    public Arguments() {
-        // TODO move to BuiltInSupportPlugin
+    public Arguments() {}
 
-        // the null factory must be interrogated last to preserve types!
-        register(new UntypedNullArgumentFactory());
-
-        register(new PrimitivesArgumentFactory());
-        register(new BoxedArgumentFactory());
-        register(new EssentialsArgumentFactory());
-        register(new SqlArgumentFactory());
-        register(new InternetArgumentFactory());
-        register(new SqlTimeArgumentFactory());
-        register(new JavaTimeArgumentFactory());
-        register(new SqlArrayArgumentFactory());
-        register(new JavaTimeZoneIdArgumentFactory());
-        register(new EnumArgumentFactory());
-        register(new OptionalArgumentFactory());
+    private Arguments(Arguments that) {
+        argumentFactories.addAll(that.argumentFactories);
+        untypedNullArgument = that.untypedNullArgument;
+        registry = null;
     }
 
     @Override
     public void setRegistry(ConfigRegistry registry) {
         this.registry = registry;
-    }
-
-    private Arguments(Arguments that) {
-        argumentFactories.addAll(that.argumentFactories);
-        untypedNullArgument = that.untypedNullArgument;
     }
 
     /**

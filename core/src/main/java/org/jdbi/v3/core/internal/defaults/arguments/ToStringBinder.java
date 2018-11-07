@@ -11,17 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
-import java.lang.reflect.Type;
-import java.util.Optional;
-import org.jdbi.v3.core.config.ConfigRegistry;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import org.jdbi.v3.core.argument.internal.StatementBinder;
 
-class UntypedNullArgumentFactory implements ArgumentFactory {
+class ToStringBinder<T> implements StatementBinder<T> {
+    private final StatementBinder<String> stringSetter;
+
+    ToStringBinder(StatementBinder<String> stringSetter) {
+        this.stringSetter = stringSetter;
+    }
+
     @Override
-    public Optional<Argument> build(Type expectedType, Object value, ConfigRegistry config) {
-        return value == null
-                ? Optional.of(config.get(Arguments.class).getUntypedNullArgument())
-                : Optional.empty();
+    public void bind(PreparedStatement p, int index, T value) throws SQLException {
+        stringSetter.bind(p, index, String.valueOf(value));
     }
 }

@@ -11,20 +11,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
 import java.lang.reflect.Type;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import org.jdbi.v3.core.argument.Argument;
+import org.jdbi.v3.core.argument.ArgumentFactory;
 import org.jdbi.v3.core.argument.internal.strategies.LoggableSetNullOrBinderArgument;
 import org.jdbi.v3.core.argument.internal.StatementBinder;
 import org.jdbi.v3.core.config.ConfigRegistry;
 
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-abstract class DelegatingArgumentFactory implements ArgumentFactory {
+public abstract class DelegatingArgumentFactory implements ArgumentFactory {
     private final Map<Class<?>, Function<?, Argument>> builders = new IdentityHashMap<>();
 
     @Override

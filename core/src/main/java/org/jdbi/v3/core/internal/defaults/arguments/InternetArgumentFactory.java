@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -21,8 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.Types;
 
 // :D
-class InternetArgumentFactory extends DelegatingArgumentFactory {
-    InternetArgumentFactory() {
+public class InternetArgumentFactory extends DelegatingArgumentFactory {
+    public InternetArgumentFactory() {
         register(Inet4Address.class, Types.OTHER, (p, i, v) -> p.setString(i, v.getHostAddress()));
         register(Inet6Address.class, Types.OTHER, (p, i, v) -> p.setString(i, v.getHostAddress()));
         register(URL.class, Types.DATALINK, PreparedStatement::setURL);

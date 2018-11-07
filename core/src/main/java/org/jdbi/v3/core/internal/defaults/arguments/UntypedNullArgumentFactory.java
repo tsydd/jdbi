@@ -11,23 +11,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
-import org.jdbi.v3.core.argument.internal.strategies.LoggableToStringOrNPEArgument;
+import org.jdbi.v3.core.argument.Argument;
+import org.jdbi.v3.core.argument.ArgumentFactory;
+import org.jdbi.v3.core.argument.Arguments;
 import org.jdbi.v3.core.config.ConfigRegistry;
 
-class EnumArgumentFactory implements ArgumentFactory {
+public class UntypedNullArgumentFactory implements ArgumentFactory {
     @Override
-    public Optional<Argument> build(Type expectedType, Object rawValue, ConfigRegistry config) {
-        // Enums must be bound as VARCHAR
-        // TODO use the same configuration as EnumMapperFactory for consistency
-        if (rawValue instanceof Enum) {
-            Enum<?> enumValue = (Enum<?>) rawValue;
-            return Optional.of(new LoggableToStringOrNPEArgument<>(enumValue, Enum::name));
-        } else {
-            return Optional.empty();
-        }
+    public Optional<Argument> build(Type expectedType, Object value, ConfigRegistry config) {
+        return value == null
+                ? Optional.of(config.get(Arguments.class).getUntypedNullArgument())
+                : Optional.empty();
     }
 }

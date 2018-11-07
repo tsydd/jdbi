@@ -11,18 +11,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
-import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.UUID;
 
-class EssentialsArgumentFactory extends DelegatingArgumentFactory {
-    EssentialsArgumentFactory() {
-        register(BigDecimal.class, Types.NUMERIC, PreparedStatement::setBigDecimal);
-        register(byte[].class, Types.VARBINARY, PreparedStatement::setBytes);
-        register(String.class, Types.VARCHAR, PreparedStatement::setString);
-        register(UUID.class, Types.VARCHAR, PreparedStatement::setObject);
+public class SqlTimeArgumentFactory extends DelegatingArgumentFactory {
+    public SqlTimeArgumentFactory() {
+        register(java.util.Date.class, Types.TIMESTAMP, (p, i, v) -> p.setTimestamp(i, new Timestamp(v.getTime())));
+        register(java.sql.Date.class, Types.DATE, PreparedStatement::setDate);
+        register(Time.class, Types.TIME, PreparedStatement::setTime);
+        register(Timestamp.class, Types.TIMESTAMP, PreparedStatement::setTimestamp);
     }
 }

@@ -14,11 +14,42 @@
 package org.jdbi.v3.core.internal.defaults;
 
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.internal.defaults.arguments.EnumArgumentFactory;
+import org.jdbi.v3.core.argument.JavaTimeZoneIdArgumentFactory;
+import org.jdbi.v3.core.array.SqlArrayArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.BoxedArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.EssentialsArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.InternetArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.JavaTimeArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.OptionalArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.PrimitivesArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.SqlArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.SqlTimeArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.UntypedNullArgumentFactory;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 
 public class JdbiDefaultsPlugin implements JdbiPlugin {
     @Override
     public void customizeJdbi(Jdbi jdbi) {
+        installArguments(jdbi);
+    }
 
+    private static void installArguments(Jdbi jdbi) {
+        // the null factory must be interrogated last to preserve types!
+        jdbi.registerArgument(new UntypedNullArgumentFactory());
+
+        jdbi.registerArgument(new InternetArgumentFactory());
+        jdbi.registerArgument(new JavaTimeZoneIdArgumentFactory());
+        jdbi.registerArgument(new JavaTimeArgumentFactory());
+        jdbi.registerArgument(new OptionalArgumentFactory());
+
+        jdbi.registerArgument(new SqlArgumentFactory());
+        jdbi.registerArgument(new SqlArrayArgumentFactory());
+        jdbi.registerArgument(new SqlTimeArgumentFactory());
+
+        jdbi.registerArgument(new EssentialsArgumentFactory());
+        jdbi.registerArgument(new EnumArgumentFactory());
+        jdbi.registerArgument(new BoxedArgumentFactory());
+        jdbi.registerArgument(new PrimitivesArgumentFactory());
     }
 }

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
 import java.lang.reflect.Type;
 import java.sql.Types;
@@ -19,13 +19,15 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import org.jdbi.v3.core.argument.Argument;
+import org.jdbi.v3.core.argument.Arguments;
 import org.jdbi.v3.core.config.ConfigRegistry;
 
 import static org.jdbi.v3.core.generic.GenericTypes.findGenericParameter;
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
-class OptionalArgumentFactory extends DelegatingArgumentFactory {
-    OptionalArgumentFactory() {
+public class OptionalArgumentFactory extends DelegatingArgumentFactory {
+    public OptionalArgumentFactory() {
         register(OptionalInt.class, Types.INTEGER, (p, i, v) -> {
             if (v.isPresent()) {
                 p.setInt(i, v.getAsInt());

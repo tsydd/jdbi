@@ -11,21 +11,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import org.jdbi.v3.core.argument.internal.StatementBinder;
+import java.sql.Types;
+import java.util.UUID;
 
-class ToStringBinder<T> implements StatementBinder<T> {
-    private final StatementBinder<String> stringSetter;
-
-    ToStringBinder(StatementBinder<String> stringSetter) {
-        this.stringSetter = stringSetter;
-    }
-
-    @Override
-    public void bind(PreparedStatement p, int index, T value) throws SQLException {
-        stringSetter.bind(p, index, String.valueOf(value));
+public class EssentialsArgumentFactory extends DelegatingArgumentFactory {
+    public EssentialsArgumentFactory() {
+        register(BigDecimal.class, Types.NUMERIC, PreparedStatement::setBigDecimal);
+        register(byte[].class, Types.VARBINARY, PreparedStatement::setBytes);
+        register(String.class, Types.VARCHAR, PreparedStatement::setString);
+        register(UUID.class, Types.VARCHAR, PreparedStatement::setObject);
     }
 }

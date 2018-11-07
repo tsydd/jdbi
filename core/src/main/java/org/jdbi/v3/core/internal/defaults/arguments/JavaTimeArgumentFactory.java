@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.argument;
+package org.jdbi.v3.core.internal.defaults.arguments;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -23,8 +23,8 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
-class JavaTimeArgumentFactory extends DelegatingArgumentFactory {
-    JavaTimeArgumentFactory() {
+public class JavaTimeArgumentFactory extends DelegatingArgumentFactory {
+    public JavaTimeArgumentFactory() {
         register(Instant.class, Types.TIMESTAMP, (p, i, v) -> p.setTimestamp(i, Timestamp.from(v)));
         register(LocalDate.class, Types.DATE, (p, i, v) -> p.setDate(i, java.sql.Date.valueOf(v)));
         register(LocalTime.class, Types.TIME, (p, i, v) -> p.setTime(i, Time.valueOf(v)));

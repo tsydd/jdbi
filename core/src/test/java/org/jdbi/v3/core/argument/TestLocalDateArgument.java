@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.jdbi.v3.core.internal.defaults.arguments.JavaTimeArgumentFactory;
 import org.jdbi.v3.core.statement.StatementContext;
 import org.junit.Rule;
 import org.junit.Test;
