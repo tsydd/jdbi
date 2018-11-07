@@ -31,6 +31,7 @@ import org.jdbi.v3.core.extension.ExtensionConsumer;
 import org.jdbi.v3.core.extension.ExtensionFactory;
 import org.jdbi.v3.core.extension.Extensions;
 import org.jdbi.v3.core.extension.NoSuchExtensionException;
+import org.jdbi.v3.core.internal.defaults.JdbiDefaultsPlugin;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 import org.jdbi.v3.core.statement.DefaultStatementBuilder;
 import org.jdbi.v3.core.statement.StatementBuilder;
@@ -60,6 +61,7 @@ public class Jdbi implements Configurable<Jdbi> {
     private Jdbi(ConnectionFactory connectionFactory) {
         Objects.requireNonNull(connectionFactory, "null connectionFactory");
         this.connectionFactory = connectionFactory;
+        installPlugin(new JdbiDefaultsPlugin());
     }
 
     /**
