@@ -38,6 +38,7 @@ public class RowMappers implements JdbiConfig<RowMappers> {
     private RowMappers(RowMappers that) {
         factories.addAll(that.factories);
         cache.putAll(that.cache);
+        registry = null;
     }
 
     @Override

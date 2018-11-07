@@ -13,6 +13,7 @@
  */
 package org.jdbi.v3.core.internal.defaults;
 
+import java.util.Arrays;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.argument.JavaTimeZoneIdArgumentFactory;
 import org.jdbi.v3.core.array.SqlArrayArgumentFactory;
@@ -35,7 +36,12 @@ import org.jdbi.v3.core.internal.defaults.mappers.column.OptionalMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.PrimitiveMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.SqlTimeMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.row.MapEntryMapperFactory;
+import org.jdbi.v3.core.mapper.CaseStrategy;
 import org.jdbi.v3.core.mapper.EnumMapperFactory;
+import org.jdbi.v3.core.mapper.MapMappers;
+import org.jdbi.v3.core.mapper.reflect.CaseInsensitiveColumnNameMatcher;
+import org.jdbi.v3.core.mapper.reflect.ReflectionMappers;
+import org.jdbi.v3.core.mapper.reflect.SnakeCaseColumnNameMatcher;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 
 public class JdbiDefaultsPlugin implements JdbiPlugin {
@@ -44,6 +50,7 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
         installArguments(jdbi);
         installColumnMappers(jdbi);
         installRowMappers(jdbi);
+        configureMappers(jdbi);
     }
 
     private static void installArguments(Jdbi jdbi) {
@@ -81,5 +88,15 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
 
     private static void installRowMappers(Jdbi jdbi) {
         jdbi.registerRowMapper(new MapEntryMapperFactory());
+    }
+
+    private static void configureMappers(Jdbi jdbi) {
+        // TODO law of least surprise?
+        jdbi.getConfig(MapMappers.class).setCaseChange(CaseStrategy.LOCALE_LOWER);
+
+        jdbi.getConfig(ReflectionMappers.class).setColumnNameMatchers(Arrays.asList(
+            new CaseInsensitiveColumnNameMatcher(),
+            new SnakeCaseColumnNameMatcher()
+        ));
     }
 }
