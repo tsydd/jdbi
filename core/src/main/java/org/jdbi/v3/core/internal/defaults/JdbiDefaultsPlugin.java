@@ -34,6 +34,7 @@ import org.jdbi.v3.core.internal.defaults.mappers.column.JavaTimeMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.OptionalMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.PrimitiveMapperFactory;
 import org.jdbi.v3.core.internal.defaults.mappers.column.SqlTimeMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.row.MapEntryMapperFactory;
 import org.jdbi.v3.core.mapper.EnumMapperFactory;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 
@@ -42,6 +43,7 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
     public void customizeJdbi(Jdbi jdbi) {
         installArguments(jdbi);
         installColumnMappers(jdbi);
+        installRowMappers(jdbi);
     }
 
     private static void installArguments(Jdbi jdbi) {
@@ -75,5 +77,9 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
         jdbi.registerColumnMapper(new EnumMapperFactory());
         jdbi.registerColumnMapper(new BoxedMapperFactory());
         jdbi.registerColumnMapper(new PrimitiveMapperFactory());
+    }
+
+    private static void installRowMappers(Jdbi jdbi) {
+        jdbi.registerRowMapper(new MapEntryMapperFactory());
     }
 }
