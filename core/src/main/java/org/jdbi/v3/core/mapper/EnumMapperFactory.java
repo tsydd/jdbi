@@ -20,7 +20,8 @@ import org.jdbi.v3.core.config.ConfigRegistry;
 /**
  * Column mapper factory which knows how to map {@link Enum} instances.
  */
-class EnumMapperFactory implements ColumnMapperFactory {
+// TODO move to Defaults package
+public class EnumMapperFactory implements ColumnMapperFactory {
     private static final EnumByNameMapperFactory BY_NAME = new EnumByNameMapperFactory();
 
     @Override

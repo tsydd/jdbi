@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.lang.reflect.Type;
 import java.net.InetAddress;
@@ -25,6 +25,9 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.mapper.ColumnMapper;
+import org.jdbi.v3.core.mapper.ColumnMapperFactory;
+import org.jdbi.v3.core.mapper.MappingException;
 import org.jdbi.v3.core.statement.StatementContext;
 
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
@@ -37,10 +40,10 @@ import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
  *     <li>{@link URI}</li>
  * </ul>
  */
-class InternetMapperFactory implements ColumnMapperFactory {
+public class InternetMapperFactory implements ColumnMapperFactory {
     private final Map<Class<?>, ColumnMapper<?>> mappers = new IdentityHashMap<>();
 
-    InternetMapperFactory() {
+    public InternetMapperFactory() {
         mappers.put(InetAddress.class, InternetMapperFactory::getInetAddress);
         mappers.put(URL.class, new GetterMapper<>(ResultSet::getURL));
         mappers.put(URI.class, new GetterMapper<>(InternetMapperFactory::getURI));

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.mapper.ColumnMapper;
+import org.jdbi.v3.core.mapper.ColumnMapperFactory;
 import org.jdbi.v3.core.statement.StatementContext;
 
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
@@ -35,10 +37,10 @@ import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
  *     <li>{@link UUID}</li>
  * </ul>
  */
-class EssentialsMapperFactory implements ColumnMapperFactory {
+public class EssentialsMapperFactory implements ColumnMapperFactory {
     private final Map<Class<?>, ColumnMapper<?>> mappers = new IdentityHashMap<>();
 
-    EssentialsMapperFactory() {
+    public EssentialsMapperFactory() {
         mappers.put(BigDecimal.class, new GetterMapper<>(ResultSet::getBigDecimal));
         mappers.put(String.class, new GetterMapper<>(ResultSet::getString));
         mappers.put(byte[].class, new GetterMapper<>(ResultSet::getBytes));

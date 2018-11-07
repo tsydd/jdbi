@@ -11,22 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.jdbi.v3.core.statement.StatementContext;
 
-class GetterMapper<T> implements ColumnMapper<T> {
-    private final ColumnGetter<T> getter;
-
-    GetterMapper(ColumnGetter<T> getter) {
-        this.getter = getter;
-    }
-
-    @Override
-    public T map(ResultSet r, int i, StatementContext ctx) throws SQLException {
-        T value = getter.get(r, i);
-        return r.wasNull() ? null : value;
-    }
+@FunctionalInterface
+interface ColumnGetter<T> {
+    T get(ResultSet rs, int i) throws SQLException;
 }

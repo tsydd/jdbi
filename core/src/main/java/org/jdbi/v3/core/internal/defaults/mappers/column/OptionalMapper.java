@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import org.jdbi.v3.core.generic.GenericTypes;
+import org.jdbi.v3.core.mapper.ColumnMapper;
+import org.jdbi.v3.core.mapper.NoSuchMapperException;
 import org.jdbi.v3.core.statement.StatementContext;
 
 class OptionalMapper<T> implements ColumnMapper<Optional<T>> {

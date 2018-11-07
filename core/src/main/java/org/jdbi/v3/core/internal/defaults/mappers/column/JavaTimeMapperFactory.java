@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -29,6 +29,8 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.mapper.ColumnMapper;
+import org.jdbi.v3.core.mapper.ColumnMapperFactory;
 
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
@@ -44,10 +46,10 @@ import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
  *     <li>{@link ZoneId}</li>
  * </ul>
  */
-class JavaTimeMapperFactory implements ColumnMapperFactory {
+public class JavaTimeMapperFactory implements ColumnMapperFactory {
     private final Map<Class<?>, ColumnMapper<?>> mappers = new IdentityHashMap<>();
 
-    JavaTimeMapperFactory() {
+    public JavaTimeMapperFactory() {
         mappers.put(Instant.class, new GetterMapper<>(JavaTimeMapperFactory::getInstant));
         mappers.put(LocalDate.class, new GetterMapper<>(JavaTimeMapperFactory::getLocalDate));
         mappers.put(LocalTime.class, new GetterMapper<>(JavaTimeMapperFactory::getLocalTime));

@@ -19,6 +19,13 @@ import java.util.List;
 import java.util.Optional;
 import org.jdbi.v3.core.config.ConfigRegistry;
 import org.jdbi.v3.core.internal.JdbiStreams;
+import org.jdbi.v3.core.internal.defaults.mappers.column.BoxedMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.EssentialsMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.InternetMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.JavaTimeMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.OptionalMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.PrimitiveMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.SqlTimeMapperFactory;
 
 /**
  * @deprecated will be replaced by an opt-out plugin to give the core no hardwired behavior

@@ -14,10 +14,11 @@
 package org.jdbi.v3.core.internal.defaults;
 
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.internal.defaults.arguments.EnumArgumentFactory;
 import org.jdbi.v3.core.argument.JavaTimeZoneIdArgumentFactory;
 import org.jdbi.v3.core.array.SqlArrayArgumentFactory;
+import org.jdbi.v3.core.array.SqlArrayMapperFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.BoxedArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.arguments.EnumArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.EssentialsArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.InternetArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.JavaTimeArgumentFactory;
@@ -26,12 +27,21 @@ import org.jdbi.v3.core.internal.defaults.arguments.PrimitivesArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.SqlArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.SqlTimeArgumentFactory;
 import org.jdbi.v3.core.internal.defaults.arguments.UntypedNullArgumentFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.BoxedMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.EssentialsMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.InternetMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.JavaTimeMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.OptionalMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.PrimitiveMapperFactory;
+import org.jdbi.v3.core.internal.defaults.mappers.column.SqlTimeMapperFactory;
+import org.jdbi.v3.core.mapper.EnumMapperFactory;
 import org.jdbi.v3.core.spi.JdbiPlugin;
 
 public class JdbiDefaultsPlugin implements JdbiPlugin {
     @Override
     public void customizeJdbi(Jdbi jdbi) {
         installArguments(jdbi);
+        installColumnMappers(jdbi);
     }
 
     private static void installArguments(Jdbi jdbi) {
@@ -51,5 +61,19 @@ public class JdbiDefaultsPlugin implements JdbiPlugin {
         jdbi.registerArgument(new EnumArgumentFactory());
         jdbi.registerArgument(new BoxedArgumentFactory());
         jdbi.registerArgument(new PrimitivesArgumentFactory());
+    }
+
+    private static void installColumnMappers(Jdbi jdbi) {
+        jdbi.registerColumnMapper(new InternetMapperFactory());
+        jdbi.registerColumnMapper(new JavaTimeMapperFactory());
+        jdbi.registerColumnMapper(new OptionalMapperFactory());
+
+        jdbi.registerColumnMapper(new SqlTimeMapperFactory());
+        jdbi.registerColumnMapper(new SqlArrayMapperFactory());
+
+        jdbi.registerColumnMapper(new EssentialsMapperFactory());
+        jdbi.registerColumnMapper(new EnumMapperFactory());
+        jdbi.registerColumnMapper(new BoxedMapperFactory());
+        jdbi.registerColumnMapper(new PrimitiveMapperFactory());
     }
 }

@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jdbi.v3.core.mapper;
+package org.jdbi.v3.core.internal.defaults.mappers.column;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -24,6 +24,8 @@ import java.util.OptionalLong;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.mapper.ColumnMapper;
+import org.jdbi.v3.core.mapper.ColumnMapperFactory;
 
 import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
 
@@ -36,10 +38,10 @@ import static org.jdbi.v3.core.generic.GenericTypes.getErasedType;
  *     <li>{@link OptionalDouble}</li>
  * </ul>
  */
-class OptionalMapperFactory implements ColumnMapperFactory {
+public class OptionalMapperFactory implements ColumnMapperFactory {
     private final Map<Class<?>, ColumnMapper<?>> mappers = new IdentityHashMap<>();
 
-    OptionalMapperFactory() {
+    public OptionalMapperFactory() {
         mappers.put(OptionalInt.class, optionalMapper(ResultSet::getInt, OptionalInt::empty, OptionalInt::of));
         mappers.put(OptionalLong.class, optionalMapper(ResultSet::getLong, OptionalLong::empty, OptionalLong::of));
         mappers.put(OptionalDouble.class, optionalMapper(ResultSet::getDouble, OptionalDouble::empty, OptionalDouble::of));
